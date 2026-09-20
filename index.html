@@ -9,202 +9,212 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#E7ECEF; --rule:#C3D0D8; --rule-soft:#D8E1E6;
-    --ink:#15303F; --ink-2:#4A6577; --ink-3:#7E93A0;
-    --line:#2B5C7A; --dot-today:#B4521F;
+    --paper:#EEF2F4; --card:#FFFFFF; --rule:#E1E7EC; --rule-soft:#EDF1F3;
+    --ink:#17242D; --ink-2:#57717C; --ink-3:#93A6AE;
+    --line:#2B6E90; --dot-today:#D9793E;
     --speed:#C0392B; --percent:#1F6FB2;
-    --up:#2E6B4F; --down:#A93226;
-    --margin-line:#C05A4E; --panel:#F6F8F9;
+    --up:#2E8F66; --down:#C0392B;
+    --panel:#F4F7F8;
+    --shadow-1:0 1px 2px rgba(23,36,45,.05), 0 6px 18px rgba(23,36,45,.07);
     box-sizing:border-box;
     padding-top:env(safe-area-inset-top,0px);
     padding-bottom:env(safe-area-inset-bottom,0px);
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --paper:#131B21; --rule:#25333C; --rule-soft:#1D272E;
-      --ink:#DDE6EB; --ink-2:#9FB2BE; --ink-3:#6C808C;
-      --line:#5C93B5; --dot-today:#D9793E;
-      --speed:#E0736A; --percent:#5CA8DE;
-      --up:#5DBE8E; --down:#E0736A;
-      --margin-line:#8A4A42; --panel:#18222A;
+      --paper:#0F161B; --card:#182028; --rule:#26323B; --rule-soft:#1D262D;
+      --ink:#E4EBEE; --ink-2:#9FB2BC; --ink-3:#6D828C;
+      --line:#5FA0C4; --dot-today:#E08B52;
+      --speed:#E0776B; --percent:#5CA8DE;
+      --up:#5FC08A; --down:#E0776B;
+      --panel:#141C22;
+      --shadow-1:0 1px 2px rgba(0,0,0,.35), 0 8px 22px rgba(0,0,0,.4);
     }
   }
   :root[data-theme="dark"]{
-    --paper:#131B21; --rule:#25333C; --rule-soft:#1D272E;
-    --ink:#DDE6EB; --ink-2:#9FB2BE; --ink-3:#6C808C;
-    --line:#5C93B5; --dot-today:#D9793E;
-    --speed:#E0736A; --percent:#5CA8DE;
-    --up:#5DBE8E; --down:#E0736A;
-    --margin-line:#8A4A42; --panel:#18222A;
+    --paper:#0F161B; --card:#182028; --rule:#26323B; --rule-soft:#1D262D;
+    --ink:#E4EBEE; --ink-2:#9FB2BC; --ink-3:#6D828C;
+    --line:#5FA0C4; --dot-today:#E08B52;
+    --speed:#E0776B; --percent:#5CA8DE;
+    --up:#5FC08A; --down:#E0776B;
+    --panel:#141C22;
+    --shadow-1:0 1px 2px rgba(0,0,0,.35), 0 8px 22px rgba(0,0,0,.4);
   }
 
   *,*::before,*::after{box-sizing:border-box}
   body{
-    margin:0; background:var(--paper);
-    background-image:
-      linear-gradient(var(--rule-soft) 1px, transparent 1px),
-      linear-gradient(90deg, var(--rule-soft) 1px, transparent 1px);
-    background-size:28px 28px;
-    color:var(--ink);
+    margin:0; background:var(--paper); color:var(--ink);
     font-family:"Vazirmatn","Segoe UI",Tahoma,system-ui,sans-serif;
     line-height:1.7; -webkit-text-size-adjust:100%;
   }
-  .sheet{
-    max-width:660px; margin:0 auto; padding:26px 20px 60px;
-    border-right:2px solid var(--margin-line); border-left:1px solid var(--rule);
-    background:color-mix(in srgb, var(--paper) 82%, transparent);
-    min-height:100%;
-  }
-  h1{font-size:1.45rem;font-weight:700;margin:0 0 2px;letter-spacing:-.01em}
-  .sub{color:var(--ink-3);font-size:.85rem;margin:0 0 6px}
-  .syncline{font-size:.76rem;margin:0 0 22px;color:var(--ink-3);display:flex;align-items:center;gap:6px}
-  .syncline.on{color:var(--up)}
-  .syncline .dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+  .sheet{ max-width:600px; margin:0 auto; padding:24px 16px 60px; min-height:100% }
 
-  /* ---- سوییچ بالا ---- */
-  .tabs{display:flex;gap:1px;background:var(--rule);margin-bottom:24px}
-  .tabs button{
-    flex:1;padding:10px 6px;border:none;cursor:pointer;
-    font-family:inherit;font-size:.9rem;font-weight:500;
-    background:var(--panel);color:var(--ink-2);
-  }
-  .tabs button[aria-selected="true"]{background:var(--ink);color:var(--paper)}
-  .tabs button:focus-visible{outline:2px solid var(--dot-today);outline-offset:-2px}
-
-  /* ---- امروز ---- */
-  .today{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
-    padding-bottom:14px;margin-bottom:20px;border-bottom:1px solid var(--rule)}
-  .big{font-size:3.2rem;font-weight:300;line-height:1;letter-spacing:-.03em}
-  .unit{font-size:1rem;color:var(--ink-2)}
-  .delta{font-size:.88rem;font-weight:500;margin-inline-start:auto}
-  .delta.up{color:var(--up)} .delta.down{color:var(--down)} .delta.flat{color:var(--ink-3)}
-
-  /* ---- فرم ---- */
-  fieldset{border:none;margin:0;padding:0}
-  .row{display:grid;gap:10px;margin-bottom:10px}
-  .r3{grid-template-columns:repeat(3,1fr)}
-  .r2{grid-template-columns:1fr 1fr}
-  .r4{grid-template-columns:repeat(2,1fr)}
-  label{display:block;font-size:.76rem;color:var(--ink-2);margin-bottom:4px}
-  input,select{
-    width:100%;padding:9px 8px;font-family:inherit;font-size:.95rem;
-    color:var(--ink);background:var(--panel);
-    border:1px solid var(--rule);border-radius:3px;text-align:center;
-  }
-  input:focus-visible,select:focus-visible{outline:2px solid var(--line);outline-offset:1px}
-  .submit{
-    width:100%;padding:11px;margin-top:4px;
-    font-family:inherit;font-size:.95rem;font-weight:500;
-    color:var(--paper);background:var(--ink);
-    border:none;border-radius:3px;cursor:pointer;
-  }
-  .submit:hover{background:var(--line)}
-  .submit:focus-visible{outline:2px solid var(--dot-today);outline-offset:2px}
-  .hintline{font-size:.75rem;color:var(--ink-3);text-align:center;margin:6px 0 0}
-  .msg{font-size:.82rem;min-height:1.4em;color:var(--ink-2);margin:8px 0 22px}
-  .msg.err{color:var(--down)}
-
-  section{margin-bottom:28px}
-  h2{font-size:.9rem;font-weight:500;color:var(--ink-2);margin:0 0 10px}
-  .chart{width:100%;height:auto;display:block;overflow:visible}
-  .legend{display:flex;gap:16px;justify-content:center;font-size:.75rem;color:var(--ink-2);margin-top:6px}
-  .legend i{display:inline-block;width:14px;height:2px;vertical-align:middle;margin-inline-end:5px}
-
-  .ranges{display:flex;gap:1px;background:var(--rule);margin:0 0 12px}
-  .ranges button{
-    flex:1;padding:6px 4px;border:none;cursor:pointer;
-    font-family:inherit;font-size:.78rem;
-    background:var(--panel);color:var(--ink-3);
-  }
-  .ranges button[aria-selected="true"]{background:var(--line);color:var(--paper);font-weight:500}
-  .ranges button:focus-visible{outline:2px solid var(--dot-today);outline-offset:-2px}
-
-  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule)}
-  .stat{background:var(--paper);padding:11px 6px;text-align:center}
-  .stat b{display:block;font-size:1.3rem;font-weight:500;line-height:1.35}
-  .stat span{font-size:.7rem;color:var(--ink-3)}
-
-  ul{list-style:none;margin:0;padding:0}
-  li{display:flex;align-items:center;gap:10px;padding:9px 2px;
-    border-bottom:1px solid var(--rule-soft);font-size:.88rem}
-  li .d{color:var(--ink-2);white-space:nowrap}
-  li .meta{color:var(--ink-3);font-size:.78rem}
-  li .h{margin-inline-start:auto;font-weight:500;white-space:nowrap}
-  .del{background:none;border:none;padding:2px 6px;width:auto;
-    color:var(--ink-3);cursor:pointer;font-size:1.15rem;line-height:1;border-radius:3px}
-  .del:hover{color:var(--down)}
-  .empty{color:var(--ink-3);font-size:.86rem;padding:12px 0}
-  [hidden]{display:none!important}
-
-  @media (max-width:430px){
-    .sheet{padding:20px 13px 48px}
-    .big{font-size:2.6rem}
-    .r4{grid-template-columns:1fr 1fr}
-  }
-  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
-
-  /* ---- ماشین‌حساب شناور ---- */
-  .calc-widget{ position:fixed; left:12px; top:50%; transform:translateY(-50%); z-index:60; direction:ltr; }
-  .calc-fab{
-    width:46px;height:46px;border-radius:50%;
-    background:var(--ink); color:var(--paper); border:none;
-    font-size:1.25rem; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,.28);
-  }
-  .calc-fab:focus-visible{ outline:2px solid var(--dot-today); outline-offset:2px }
-  .calc-panel{
-    display:none; margin-top:8px;
-    background:var(--panel); border:1px solid var(--rule); border-radius:8px;
-    padding:8px; width:172px; box-shadow:0 6px 20px rgba(0,0,0,.22);
-  }
-  .calc-panel.open{ display:block }
-  .calc-display{
-    background:var(--paper); border:1px solid var(--rule); border-radius:4px;
-    padding:9px 10px; margin-bottom:6px;
-    font-size:1.2rem; text-align:left; direction:ltr;
-    overflow-x:auto; white-space:nowrap;
-  }
-  .calc-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:4px }
-  .calc-grid button{
-    padding:9px 0; font-size:.9rem; border:1px solid var(--rule); border-radius:4px;
-    background:var(--paper); color:var(--ink); cursor:pointer; font-family:inherit;
-  }
-  .calc-grid button:hover{ background:var(--line); color:var(--paper); border-color:var(--line) }
-  .calc-op{ background:var(--rule-soft) }
-  .calc-eq{ grid-row: span 2; background:var(--dot-today)!important; color:var(--paper)!important; border-color:var(--dot-today)!important }
-  .calc-zero{ grid-column: span 2 }
-
-  @media (min-width:900px){
-    .calc-fab{ display:none }
-    .calc-panel{ display:block!important; margin-top:0 }
-  }
-  @media (max-width:430px){
-    .calc-widget{ left:8px }
-    .calc-panel{ width:158px }
-  }
-
-  /* ---- نوار بالا و منوی سه‌نقطه ---- */
   .topbar{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px }
-  .topbar h1{ margin:0 }
+  h1{ font-size:1.55rem; font-weight:700; margin:0; letter-spacing:-.015em }
+  .sub{ color:var(--ink-3); font-size:.85rem; margin:6px 0 6px }
+  .syncline{ font-size:.76rem; margin:0 0 20px; color:var(--ink-3); display:flex; align-items:center; gap:6px }
+  .syncline.on{ color:var(--up) }
+  .syncline .dot{ width:6px;height:6px;border-radius:50%;background:currentColor;flex:none }
+
+  /* ---- منوی سه‌نقطه ---- */
   .menu-wrap{ position:relative; flex:none }
   .menu-btn{
     width:34px;height:34px;border-radius:50%;border:1px solid var(--rule);
-    background:var(--panel); color:var(--ink); font-size:1.15rem; line-height:1;
-    cursor:pointer;
+    background:var(--card); color:var(--ink); font-size:1.15rem; line-height:1; cursor:pointer;
   }
   .menu-btn:hover{ background:var(--rule-soft) }
   .menu-btn:focus-visible{ outline:2px solid var(--dot-today); outline-offset:2px }
   .menu-dropdown{
     position:absolute; inset-inline-end:0; top:calc(100% + 6px);
-    background:var(--panel); border:1px solid var(--rule); border-radius:8px;
-    box-shadow:0 6px 18px rgba(0,0,0,.2); overflow:hidden; min-width:170px; z-index:70;
+    background:var(--card); border:1px solid var(--rule); border-radius:12px;
+    box-shadow:var(--shadow-1); overflow:hidden; min-width:180px; z-index:70;
   }
   .menu-dropdown button{
-    display:block; width:100%; text-align:right; padding:10px 14px;
-    background:none; border:none; color:var(--ink); font-family:inherit; font-size:.88rem;
-    cursor:pointer;
+    display:block; width:100%; text-align:right; padding:11px 14px;
+    background:none; border:none; color:var(--ink); font-family:inherit; font-size:.86rem; cursor:pointer;
   }
   .menu-dropdown button + button{ border-top:1px solid var(--rule-soft) }
   .menu-dropdown button:hover{ background:var(--rule-soft) }
+
+  /* ---- تب‌های پیلی (سطح صفحه، درس، بازه، حالت ورود) ---- */
+  .tabs,.ranges{
+    display:flex; gap:2px; background:var(--rule-soft); padding:3px;
+    border-radius:999px; margin-bottom:18px;
+  }
+  .tabs button,.ranges button{
+    flex:1; border:none; border-radius:999px; padding:9px 6px;
+    background:none; color:var(--ink-2); font-family:inherit; font-size:.85rem; cursor:pointer;
+  }
+  .ranges button{ padding:7px 4px; font-size:.76rem }
+  .tabs button[aria-selected="true"],.ranges button[aria-selected="true"]{
+    background:var(--card); color:var(--ink); font-weight:600; box-shadow:0 1px 3px rgba(0,0,0,.1);
+  }
+  .tabs button:focus-visible,.ranges button:focus-visible{ outline:2px solid var(--dot-today); outline-offset:2px }
+
+  /* ---- کارت پایه ---- */
+  .card{
+    background:var(--card); border:1px solid var(--rule); border-radius:16px;
+    box-shadow:var(--shadow-1); padding:18px 16px; margin-bottom:18px;
+  }
+  .hero{ border-inline-start:4px solid var(--dot-today); padding-inline-start:14px }
+
+  /* ---- کارت‌های خانه ---- */
+  .tile{ display:block; width:100%; text-align:inherit; cursor:pointer; font-family:inherit; color:inherit; padding-bottom:12px }
+  .tile-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px }
+  .tile-title{ font-size:.85rem; font-weight:600; color:var(--ink-2) }
+  .tile-arrow{ color:var(--ink-3); font-size:1.1rem }
+  .tile-body{ display:flex; align-items:baseline; gap:7px; margin-bottom:4px }
+  .tile-big{ font-size:2rem; font-weight:300; letter-spacing:-.02em }
+  .tile-unit{ font-size:.78rem; color:var(--ink-2) }
+  .tile-spark{ width:100%; height:44px; display:block; overflow:visible }
+  .ai-card .ai-desc{ font-size:.84rem; color:var(--ink-2); margin:0 0 12px }
+  .ai-card .submit{ width:auto; padding:9px 18px }
+
+  /* ---- امروز ---- */
+  .today{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+    padding-bottom:14px; margin-bottom:16px; border-bottom:1px solid var(--rule-soft) }
+  .big{ font-size:3rem; font-weight:300; line-height:1; letter-spacing:-.03em }
+  .unit{ font-size:1rem; color:var(--ink-2) }
+  .delta{ font-size:.86rem; font-weight:500; margin-inline-start:auto }
+  .delta.up{ color:var(--up) } .delta.down{ color:var(--down) } .delta.flat{ color:var(--ink-3) }
+
+  /* ---- فرم ---- */
+  fieldset{ border:none; margin:0; padding:0 }
+  .row{ display:grid; gap:10px; margin-bottom:10px }
+  .r3{ grid-template-columns:repeat(3,1fr) }
+  .r2{ grid-template-columns:1fr 1fr }
+  .r4{ grid-template-columns:repeat(2,1fr) }
+  label{ display:block; font-size:.76rem; color:var(--ink-2); margin-bottom:4px }
+  input,select{
+    width:100%; padding:10px 8px; font-family:inherit; font-size:.95rem;
+    color:var(--ink); background:var(--panel);
+    border:1px solid var(--rule); border-radius:8px; text-align:center;
+  }
+  input:focus-visible,select:focus-visible{ outline:2px solid var(--line); outline-offset:1px }
+  .submit{
+    width:100%; padding:12px; margin-top:4px;
+    font-family:inherit; font-size:.95rem; font-weight:600;
+    color:#fff; background:var(--line);
+    border:none; border-radius:9px; cursor:pointer;
+  }
+  .submit:hover{ filter:brightness(1.08) }
+  .submit:focus-visible{ outline:2px solid var(--dot-today); outline-offset:2px }
+  .hintline{ font-size:.75rem; color:var(--ink-3); text-align:center; margin:6px 0 0 }
+  .msg{ font-size:.82rem; min-height:1.4em; color:var(--ink-2); margin:8px 0 0 }
+  .msg.err{ color:var(--down) }
+
+  section{
+    background:var(--card); border:1px solid var(--rule); border-radius:16px;
+    box-shadow:var(--shadow-1); padding:18px 16px; margin-bottom:18px;
+  }
+  h2{ font-size:.88rem; font-weight:600; color:var(--ink-2); margin:0 0 12px }
+  .chart{ width:100%; height:auto; display:block; overflow:visible }
+  .legend{ display:flex; gap:16px; justify-content:center; font-size:.75rem; color:var(--ink-2); margin-top:8px }
+  .legend i{ display:inline-block; width:14px; height:2px; vertical-align:middle; margin-inline-end:5px }
+
+  .stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px }
+  .stat{ background:var(--rule-soft); border-radius:12px; padding:13px 6px; text-align:center }
+  .stat b{ display:block; font-size:1.25rem; font-weight:600; line-height:1.35 }
+  .stat span{ font-size:.7rem; color:var(--ink-3) }
+
+  ul{ list-style:none; margin:0; padding:0 }
+  li{ display:flex; align-items:center; gap:10px; padding:10px 2px;
+    border-bottom:1px solid var(--rule-soft); font-size:.88rem }
+  li:last-child{ border-bottom:none }
+  li .d{ color:var(--ink-2); white-space:nowrap }
+  li .meta{ color:var(--ink-3); font-size:.78rem }
+  li .h{ margin-inline-start:auto; font-weight:600; white-space:nowrap }
+  .del{ background:none; border:none; padding:2px 6px; width:auto;
+    color:var(--ink-3); cursor:pointer; font-size:1.15rem; line-height:1; border-radius:6px }
+  .del:hover{ color:var(--down); background:var(--rule-soft) }
+  .empty{ color:var(--ink-3); font-size:.86rem; padding:8px 0 }
+  [hidden]{ display:none!important }
+
+  @media (max-width:430px){
+    .big{ font-size:2.5rem }
+    .r4{ grid-template-columns:1fr 1fr }
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+  /* ---- ماشین‌حساب شناور ---- */
+  .calc-widget{ position:fixed; left:10px; top:calc(env(safe-area-inset-top,0px) + 10px); z-index:60; direction:ltr }
+  .calc-fab{
+    width:40px;height:40px;border-radius:50%;
+    background:var(--card); color:var(--ink); border:1px solid var(--rule);
+    font-size:1.1rem; cursor:pointer; box-shadow:var(--shadow-1);
+  }
+  .calc-fab:focus-visible{ outline:2px solid var(--dot-today); outline-offset:2px }
+  .calc-panel{
+    display:none; margin-top:8px;
+    background:var(--card); border:1px solid var(--rule); border-radius:12px;
+    padding:9px; width:174px; box-shadow:var(--shadow-1);
+  }
+  .calc-panel.open{ display:block }
+  .calc-display{
+    background:var(--panel); border:1px solid var(--rule); border-radius:6px;
+    padding:9px 10px; margin-bottom:6px;
+    font-size:1.2rem; text-align:left; direction:ltr;
+    overflow-x:auto; white-space:nowrap;
+  }
+  .calc-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:5px }
+  .calc-grid button{
+    padding:10px 0; font-size:.9rem; border:1px solid var(--rule); border-radius:6px;
+    background:var(--panel); color:var(--ink); cursor:pointer; font-family:inherit;
+  }
+  .calc-grid button:hover{ background:var(--line); color:#fff; border-color:var(--line) }
+  .calc-op{ background:var(--rule-soft) }
+  .calc-eq{ grid-row:span 2; background:var(--dot-today)!important; color:#fff!important; border-color:var(--dot-today)!important }
+  .calc-zero{ grid-column:span 2 }
+
+  @media (min-width:900px){
+    .calc-widget{ left:auto; right:24px; top:50%; transform:translateY(-50%) }
+    .calc-fab{ display:none }
+    .calc-panel{ display:block!important; margin-top:0; width:224px; padding:12px }
+    .calc-display{ font-size:1.45rem; padding:12px 12px }
+    .calc-grid{ gap:6px }
+    .calc-grid button{ font-size:1.02rem; padding:13px 0 }
+  }
+  @media (max-width:360px){ .calc-panel{ width:158px } }
 
   /* ---- مودال ---- */
   .modal-backdrop{
@@ -212,8 +222,8 @@
     display:flex; align-items:center; justify-content:center; z-index:80; padding:16px;
   }
   .modal{
-    position:relative; background:var(--paper); border:1px solid var(--rule); border-radius:10px;
-    padding:22px 18px 18px; width:100%; max-width:340px; box-shadow:0 12px 32px rgba(0,0,0,.3);
+    position:relative; background:var(--card); border:1px solid var(--rule); border-radius:14px;
+    padding:22px 18px 18px; width:100%; max-width:340px; box-shadow:0 16px 40px rgba(0,0,0,.3);
   }
   .modal-close{
     position:absolute; top:8px; inset-inline-start:10px;
@@ -230,6 +240,7 @@
     <div class="menu-wrap">
       <button type="button" class="menu-btn" id="menuBtn" aria-label="منو" aria-expanded="false">⋮</button>
       <div class="menu-dropdown" id="menuDropdown" hidden>
+        <button type="button" id="menuThemeBtn">🌙 حالت شب</button>
         <button type="button" id="menuAuthBtn">ورود / ثبت‌نام</button>
         <button type="button" id="menuAboutBtn">دربارهٔ سایت</button>
       </div>
@@ -239,34 +250,70 @@
   <p class="syncline" id="syncLine"><span class="dot"></span><span id="syncText">در حال بررسی وضعیت هم‌گام‌سازی…</span></p>
 
   <div class="tabs" role="tablist">
-    <button type="button" role="tab" id="tabStudy" aria-selected="true" aria-controls="panelStudy">ساعت مطالعه</button>
+    <button type="button" role="tab" id="tabHome" aria-selected="true" aria-controls="panelHome">خانه</button>
+    <button type="button" role="tab" id="tabStudy" aria-selected="false" aria-controls="panelStudy">ساعت مطالعه</button>
     <button type="button" role="tab" id="tabTest" aria-selected="false" aria-controls="panelTest">پیشرفت تستی</button>
   </div>
 
-  <!-- ================= ساعت مطالعه ================= -->
-  <div id="panelStudy" role="tabpanel" aria-labelledby="tabStudy">
-    <div class="today">
-      <span class="big" id="todayHours">—</span>
-      <span class="unit">ساعت امروز</span>
-      <span class="delta" id="delta"></span>
-    </div>
+  <!-- ================= خانه ================= -->
+  <div id="panelHome" role="tabpanel" aria-labelledby="tabHome">
+    <button type="button" class="card tile" id="tileStudy">
+      <div class="tile-head">
+        <span class="tile-title">ساعت مطالعه</span>
+        <span class="tile-arrow">‹</span>
+      </div>
+      <div class="tile-body">
+        <span class="tile-big" id="tileTodayHours">—</span>
+        <span class="tile-unit">ساعت امروز</span>
+      </div>
+      <svg class="tile-spark" id="tileHoursSpark" viewBox="0 0 200 46" aria-hidden="true"></svg>
+    </button>
 
-    <form id="studyForm">
-      <fieldset>
-        <div class="row r3">
-          <div><label for="sYear">سال</label><select id="sYear"></select></div>
-          <div><label for="sMonth">ماه</label><select id="sMonth"></select></div>
-          <div><label for="sDay">روز</label><select id="sDay"></select></div>
-        </div>
-        <p class="hintline" id="sDatePreview"></p>
-        <div class="row">
-          <div><label for="sHours">ساعت مطالعه</label>
-            <input type="text" id="sHours" inputmode="decimal" placeholder="۲٫۵"></div>
-        </div>
-        <button type="submit" class="submit">ثبت ساعت</button>
-      </fieldset>
-    </form>
-    <p class="msg" id="sMsg"></p>
+    <button type="button" class="card tile" id="tileTest">
+      <div class="tile-head">
+        <span class="tile-title">پیشرفت تستی</span>
+        <span class="tile-arrow">‹</span>
+      </div>
+      <div class="tile-body">
+        <span class="tile-big" id="tileWeekPercent">—</span>
+        <span class="tile-unit">میانگین درصد این هفته</span>
+      </div>
+      <svg class="tile-spark" id="tileTestSpark" viewBox="0 0 200 46" aria-hidden="true"></svg>
+    </button>
+
+    <div class="card ai-card">
+      <div class="tile-head"><span class="tile-title">دستیار درسی</span></div>
+      <p class="ai-desc">اگه سوالی دربارهٔ درس‌هات داری، از هوش‌مصنوعی بپرس — در تب جدید باز می‌شود.</p>
+      <button type="button" class="submit" id="aiOpenBtn">باز کردن گفتگو ↗</button>
+    </div>
+  </div>
+
+  <!-- ================= ساعت مطالعه ================= -->
+  <div id="panelStudy" role="tabpanel" aria-labelledby="tabStudy" hidden>
+    <div class="card hero">
+      <div class="today">
+        <span class="big" id="todayHours">—</span>
+        <span class="unit">ساعت امروز</span>
+        <span class="delta" id="delta"></span>
+      </div>
+
+      <form id="studyForm">
+        <fieldset>
+          <div class="row r3">
+            <div><label for="sYear">سال</label><select id="sYear"></select></div>
+            <div><label for="sMonth">ماه</label><select id="sMonth"></select></div>
+            <div><label for="sDay">روز</label><select id="sDay"></select></div>
+          </div>
+          <p class="hintline" id="sDatePreview"></p>
+          <div class="row">
+            <div><label for="sHours">ساعت مطالعه</label>
+              <input type="text" id="sHours" inputmode="decimal" placeholder="۲٫۵"></div>
+          </div>
+          <button type="submit" class="submit">ثبت ساعت</button>
+        </fieldset>
+      </form>
+      <p class="msg" id="sMsg"></p>
+    </div>
 
     <section>
       <h2 id="hoursChartTitle">روند چهارده روز اخیر</h2>
@@ -297,58 +344,60 @@
 
   <!-- ================= پیشرفت تستی ================= -->
   <div id="panelTest" role="tabpanel" aria-labelledby="tabTest" hidden>
-    <form id="testForm">
-      <fieldset>
-        <div class="row r3">
-          <div><label for="tYear">سال</label><select id="tYear"></select></div>
-          <div><label for="tMonth">ماه</label><select id="tMonth"></select></div>
-          <div><label for="tDay">روز</label><select id="tDay"></select></div>
-        </div>
-        <p class="hintline" id="tDatePreview"></p>
-        <div class="row r2">
-          <div><label for="tSubject">درس</label>
-            <select id="tSubject">
-              <option value="physics">فیزیک</option>
-              <option value="chemistry">شیمی</option>
-              <option value="math">ریاضیات</option>
-            </select>
+    <div class="card hero">
+      <form id="testForm">
+        <fieldset>
+          <div class="row r3">
+            <div><label for="tYear">سال</label><select id="tYear"></select></div>
+            <div><label for="tMonth">ماه</label><select id="tMonth"></select></div>
+            <div><label for="tDay">روز</label><select id="tDay"></select></div>
           </div>
-          <div><label for="tTime">زمان (دقیقه)</label>
-            <input type="text" id="tTime" inputmode="decimal" placeholder="۲۵"></div>
-        </div>
-
-        <div class="tabs" role="tablist" id="entryModeTabs" style="margin-bottom:10px">
-          <button type="button" role="tab" data-mode="count" aria-selected="true">با تعداد</button>
-          <button type="button" role="tab" data-mode="percent" aria-selected="false">با درصد</button>
-        </div>
-
-        <div id="countFields">
-          <div class="row r4">
-            <div><label for="tCount">تعداد کل</label>
-              <input type="text" id="tCount" inputmode="numeric" placeholder="۲۰"></div>
-            <div><label for="tCorrect">تعداد صحیح</label>
-              <input type="text" id="tCorrect" inputmode="numeric" placeholder="۱۲"></div>
-            <div><label for="tWrong">تعداد غلط</label>
-              <input type="text" id="tWrong" inputmode="numeric" placeholder="۴"></div>
-            <div><label for="tBlank">تعداد نزده</label>
-              <input type="text" id="tBlank" inputmode="numeric" placeholder="۴"></div>
-          </div>
-          <p class="hintline" id="tHint"></p>
-        </div>
-
-        <div id="percentFields" hidden>
+          <p class="hintline" id="tDatePreview"></p>
           <div class="row r2">
-            <div><label for="tPercentCount">تعداد کل</label>
-              <input type="text" id="tPercentCount" inputmode="numeric" placeholder="۲۰"></div>
-            <div><label for="tPercent">درصد</label>
-              <input type="text" id="tPercent" inputmode="decimal" placeholder="۴۰"></div>
+            <div><label for="tSubject">درس</label>
+              <select id="tSubject">
+                <option value="physics">فیزیک</option>
+                <option value="chemistry">شیمی</option>
+                <option value="math">ریاضیات</option>
+              </select>
+            </div>
+            <div><label for="tTime">زمان (دقیقه)</label>
+              <input type="text" id="tTime" inputmode="decimal" placeholder="۲۵"></div>
           </div>
-        </div>
 
-        <button type="submit" class="submit">ثبت پارت تست</button>
-      </fieldset>
-    </form>
-    <p class="msg" id="tMsg"></p>
+          <div class="tabs" role="tablist" id="entryModeTabs" style="margin-bottom:10px">
+            <button type="button" role="tab" data-mode="count" aria-selected="true">با تعداد</button>
+            <button type="button" role="tab" data-mode="percent" aria-selected="false">با درصد</button>
+          </div>
+
+          <div id="countFields">
+            <div class="row r4">
+              <div><label for="tCount">تعداد کل</label>
+                <input type="text" id="tCount" inputmode="numeric" placeholder="۲۰"></div>
+              <div><label for="tCorrect">تعداد صحیح</label>
+                <input type="text" id="tCorrect" inputmode="numeric" placeholder="۱۲"></div>
+              <div><label for="tWrong">تعداد غلط</label>
+                <input type="text" id="tWrong" inputmode="numeric" placeholder="۴"></div>
+              <div><label for="tBlank">تعداد نزده</label>
+                <input type="text" id="tBlank" inputmode="numeric" placeholder="۴"></div>
+            </div>
+            <p class="hintline" id="tHint"></p>
+          </div>
+
+          <div id="percentFields" hidden>
+            <div class="row r2">
+              <div><label for="tPercentCount">تعداد کل</label>
+                <input type="text" id="tPercentCount" inputmode="numeric" placeholder="۲۰"></div>
+              <div><label for="tPercent">درصد</label>
+                <input type="text" id="tPercent" inputmode="decimal" placeholder="۴۰"></div>
+            </div>
+          </div>
+
+          <button type="submit" class="submit">ثبت پارت تست</button>
+        </fieldset>
+      </form>
+      <p class="msg" id="tMsg"></p>
+    </div>
 
     <div class="tabs" role="tablist" id="subjectTabs">
       <button type="button" role="tab" data-s="physics" aria-selected="true">فیزیک</button>
@@ -937,15 +986,89 @@ function renderTestList(){
 }
 function renderTests(){ renderTestChart(); renderTestStats(); renderTestList(); }
 
-/* ===================== تب‌های اصلی ===================== */
-tabStudy.addEventListener("click",()=>switchTab(true));
-tabTest.addEventListener("click",()=>switchTab(false));
-function switchTab(study){
-  tabStudy.setAttribute("aria-selected",study);
-  tabTest.setAttribute("aria-selected",!study);
-  panelStudy.hidden=!study; panelTest.hidden=study;
-  if(study) renderStudy(); else renderTests();
+/* ===================== ابزار نمودار کوچک (اسپارک‌لاین) ===================== */
+function drawSpark(svg,values,color){
+  svg.innerHTML="";
+  const NS="http://www.w3.org/2000/svg";
+  const mk=(t,a)=>{ const e=document.createElementNS(NS,t); for(const k in a) e.setAttribute(k,a[k]); return e; };
+  const idxVals = values.map((v,i)=>({v,i})).filter(o=>o.v!=null);
+  if(idxVals.length<1) return;
+  const W=200,H=44,pad=4;
+  const vs=idxVals.map(o=>o.v);
+  const min=Math.min(...vs), max=Math.max(...vs);
+  const span=(max-min)||1;
+  const n=values.length;
+  const px=i=> n===1 ? W/2 : pad+i*(W-2*pad)/(n-1);
+  const py=v=> H-pad-((v-min)/span)*(H-2*pad);
+  let d="",open=false;
+  values.forEach((v,i)=>{
+    if(v==null){ open=false; return; }
+    d+=(open?" L ":" M ")+px(i)+" "+py(v); open=true;
+  });
+  if(d) svg.appendChild(mk("path",{d:d.trim(),fill:"none",stroke:color,"stroke-width":2.2,
+    "stroke-linecap":"round","stroke-linejoin":"round"}));
+  const last=idxVals[idxVals.length-1];
+  svg.appendChild(mk("circle",{cx:px(last.i),cy:py(last.v),r:3.4,fill:color}));
 }
+
+/* ===================== صفحهٔ خانه ===================== */
+function renderHomeTiles(){
+  const t=hours[todayISO()];
+  tileTodayHours.textContent = t===undefined ? "—" : fa(round1(t));
+  const last7=[]; for(let i=6;i>=0;i--) last7.push(hours[shiftISO(-i)] ?? null);
+  drawSpark(tileHoursSpark,last7,"var(--line)");
+
+  const weeks=bucketList("week");
+  const groups={};
+  tests.forEach(rec=>{ const k=bucketOf(rec.date,"week"); (groups[k]=groups[k]||[]).push(rec); });
+  const weekPercents=weeks.map(k=> groups[k] ? round1(groups[k].reduce((a,r)=>a+percentOf(r),0)/groups[k].length) : null);
+  const lastVal=[...weekPercents].reverse().find(v=>v!=null);
+  tileWeekPercent.textContent = lastVal==null ? "—" : fa(lastVal)+"٪";
+  drawSpark(tileTestSpark,weekPercents,"var(--percent)");
+}
+tileStudy.addEventListener("click",()=>goTo("study"));
+tileTest.addEventListener("click",()=>goTo("test"));
+aiOpenBtn.addEventListener("click",()=>window.open("https://claude.ai/new","_blank","noopener"));
+
+/* ===================== تب‌های اصلی ===================== */
+tabHome.addEventListener("click",()=>goTo("home"));
+tabStudy.addEventListener("click",()=>goTo("study"));
+tabTest.addEventListener("click",()=>goTo("test"));
+function goTo(view){
+  tabHome.setAttribute("aria-selected",String(view==="home"));
+  tabStudy.setAttribute("aria-selected",String(view==="study"));
+  tabTest.setAttribute("aria-selected",String(view==="test"));
+  panelHome.hidden = view!=="home";
+  panelStudy.hidden = view!=="study";
+  panelTest.hidden = view!=="test";
+  if(view==="study") renderStudy();
+  else if(view==="test") renderTests();
+  else renderHomeTiles();
+}
+
+/* ===================== تم روز/شب ===================== */
+const THEME_KEY="study-theme";
+function effectiveTheme(){
+  let explicit=null; try{ explicit=localStorage.getItem(THEME_KEY); }catch(e){}
+  if(explicit) return explicit;
+  return (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark":"light";
+}
+function updateThemeBtn(){
+  menuThemeBtn.textContent = effectiveTheme()==="dark" ? "☀️ حالت روز" : "🌙 حالت شب";
+}
+function applyStoredTheme(){
+  let explicit=null; try{ explicit=localStorage.getItem(THEME_KEY); }catch(e){}
+  if(explicit) document.documentElement.setAttribute("data-theme",explicit);
+  updateThemeBtn();
+}
+menuThemeBtn.addEventListener("click",e=>{
+  e.stopPropagation(); menuDropdown.hidden=true;
+  const next = effectiveTheme()==="dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme",next);
+  try{ localStorage.setItem(THEME_KEY,next); }catch(err){}
+  updateThemeBtn();
+});
+applyStoredTheme();
 
 /* ===================== هم‌گام‌سازی با حساب Claude ===================== */
 let dbRef=null, cloudReady=false, writeChain=Promise.resolve(), suppressNextLocalEcho=false;
@@ -988,7 +1111,7 @@ async function initCloudSync(){
     }
     cloudReady = true;
     setSync("با حساب شما هم‌گام است — روی هر دستگاهی یکی است", true);
-    renderStudy(); renderTests();
+    renderStudy(); renderTests(); renderHomeTiles();
     queueCloudSave(); // ادغام احتمالی بالا را هم ذخیره کن
 
     dbRef.onSnapshot(snap=>{
@@ -998,7 +1121,7 @@ async function initCloudSync(){
       hours = cloud.hours || {};
       tests = Array.isArray(cloud.tests) ? cloud.tests : [];
       saveHoursLocal(); saveTestsLocal();
-      renderStudy(); renderTests();
+      renderStudy(); renderTests(); renderHomeTiles();
     }, ()=>{ setSync("فقط روی همین مرورگر ذخیره می‌شود", false); cloudReady=false; });
 
   }catch(e){
@@ -1133,13 +1256,13 @@ function saveTestsLocal(){ try{ localStorage.setItem(testsKey(),JSON.stringify(t
       try{ localStorage.setItem(ACTIVE_USER_KEY,key); }catch(err){}
       loadAll();
     }
-    renderStudy(); renderTests();
+    renderStudy(); renderTests(); renderHomeTiles();
     refreshAuthView();
   });
 
   authLogout.addEventListener("click",()=>{
     try{ localStorage.removeItem(ACTIVE_USER_KEY); }catch(err){}
-    loadAll(); renderStudy(); renderTests();
+    loadAll(); renderStudy(); renderTests(); renderHomeTiles();
     authMode="login"; authSubmit.textContent="ورود";
     document.querySelectorAll("#authTabs button").forEach(b=>b.setAttribute("aria-selected", b.dataset.a==="login"?"true":"false"));
     refreshAuthView();
@@ -1148,8 +1271,7 @@ function saveTestsLocal(){ try{ localStorage.setItem(testsKey(),JSON.stringify(t
 
 /* ===================== شروع ===================== */
 loadAll();
-renderStudy();
-renderTests();
+goTo("home");
 initCloudSync();
 </script>
 </body>
