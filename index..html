@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>دفتر مطالعه</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#E7ECEF; --rule:#C3D0D8; --rule-soft:#D8E1E6;
+    --ink:#15303F; --ink-2:#4A6577; --ink-3:#7E93A0;
+    --line:#2B5C7A; --dot-today:#B4521F;
+    --speed:#C0392B; --percent:#1F6FB2;
+    --up:#2E6B4F; --down:#A93226;
+    --margin-line:#C05A4E; --panel:#F6F8F9;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#131B21; --rule:#25333C; --rule-soft:#1D272E;
+      --ink:#DDE6EB; --ink-2:#9FB2BE; --ink-3:#6C808C;
+      --line:#5C93B5; --dot-today:#D9793E;
+      --speed:#E0736A; --percent:#5CA8DE;
+      --up:#5DBE8E; --down:#E0736A;
+      --margin-line:#8A4A42; --panel:#18222A;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#131B21; --rule:#25333C; --rule-soft:#1D272E;
+    --ink:#DDE6EB; --ink-2:#9FB2BE; --ink-3:#6C808C;
+    --line:#5C93B5; --dot-today:#D9793E;
+    --speed:#E0736A; --percent:#5CA8DE;
+    --up:#5DBE8E; --down:#E0736A;
+    --margin-line:#8A4A42; --panel:#18222A;
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  body{
+    margin:0; background:var(--paper);
+    background-image:
+      linear-gradient(var(--rule-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--rule-soft) 1px, transparent 1px);
+    background-size:28px 28px;
+    color:var(--ink);
+    font-family:"Vazirmatn","Segoe UI",Tahoma,system-ui,sans-serif;
+    line-height:1.7; -webkit-text-size-adjust:100%;
+  }
+  .sheet{
+    max-width:660px; margin:0 auto; padding:26px 20px 60px;
+    border-right:2px solid var(--margin-line); border-left:1px solid var(--rule);
+    background:color-mix(in srgb, var(--paper) 82%, transparent);
+    min-height:100%;
+  }
+  h1{font-size:1.45rem;font-weight:700;margin:0 0 2px;letter-spacing:-.01em}
+  .sub{color:var(--ink-3);font-size:.85rem;margin:0 0 6px}
+  .syncline{font-size:.76rem;margin:0 0 22px;color:var(--ink-3);display:flex;align-items:center;gap:6px}
+  .syncline.on{color:var(--up)}
+  .syncline .dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+
+  /* ---- سوییچ بالا ---- */
+  .tabs{display:flex;gap:1px;background:var(--rule);margin-bottom:24px}
+  .tabs button{
+    flex:1;padding:10px 6px;border:none;cursor:pointer;
+    font-family:inherit;font-size:.9rem;font-weight:500;
+    background:var(--panel);color:var(--ink-2);
+  }
+  .tabs button[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+  .tabs button:focus-visible{outline:2px solid var(--dot-today);outline-offset:-2px}
+
+  /* ---- امروز ---- */
+  .today{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+    padding-bottom:14px;margin-bottom:20px;border-bottom:1px solid var(--rule)}
+  .big{font-size:3.2rem;font-weight:300;line-height:1;letter-spacing:-.03em}
+  .unit{font-size:1rem;color:var(--ink-2)}
+  .delta{font-size:.88rem;font-weight:500;margin-inline-start:auto}
+  .delta.up{color:var(--up)} .delta.down{color:var(--down)} .delta.flat{color:var(--ink-3)}
+
+  /* ---- فرم ---- */
+  fieldset{border:none;margin:0;padding:0}
+  .row{display:grid;gap:10px;margin-bottom:10px}
+  .r3{grid-template-columns:repeat(3,1fr)}
+  .r2{grid-template-columns:1fr 1fr}
+  .r4{grid-template-columns:repeat(2,1fr)}
+  label{display:block;font-size:.76rem;color:var(--ink-2);margin-bottom:4px}
+  input,select{
+    width:100%;padding:9px 8px;font-family:inherit;font-size:.95rem;
+    color:var(--ink);background:var(--panel);
+    border:1px solid var(--rule);border-radius:3px;text-align:center;
+  }
+  input:focus-visible,select:focus-visible{outline:2px solid var(--line);outline-offset:1px}
+  .submit{
+    width:100%;padding:11px;margin-top:4px;
+    font-family:inherit;font-size:.95rem;font-weight:500;
+    color:var(--paper);background:var(--ink);
+    border:none;border-radius:3px;cursor:pointer;
+  }
+  .submit:hover{background:var(--line)}
+  .submit:focus-visible{outline:2px solid var(--dot-today);outline-offset:2px}
+  .hintline{font-size:.75rem;color:var(--ink-3);text-align:center;margin:6px 0 0}
+  .msg{font-size:.82rem;min-height:1.4em;color:var(--ink-2);margin:8px 0 22px}
+  .msg.err{color:var(--down)}
+
+  section{margin-bottom:28px}
+  h2{font-size:.9rem;font-weight:500;color:var(--ink-2);margin:0 0 10px}
+  .chart{width:100%;height:auto;display:block;overflow:visible}
+  .legend{display:flex;gap:16px;justify-content:center;font-size:.75rem;color:var(--ink-2);margin-top:6px}
+  .legend i{display:inline-block;width:14px;height:2px;vertical-align:middle;margin-inline-end:5px}
+
+  .ranges{display:flex;gap:1px;background:var(--rule);margin:0 0 12px}
+  .ranges button{
+    flex:1;padding:6px 4px;border:none;cursor:pointer;
+    font-family:inherit;font-size:.78rem;
+    background:var(--panel);color:var(--ink-3);
+  }
+  .ranges button[aria-selected="true"]{background:var(--line);color:var(--paper);font-weight:500}
+  .ranges button:focus-visible{outline:2px solid var(--dot-today);outline-offset:-2px}
+
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule)}
+  .stat{background:var(--paper);padding:11px 6px;text-align:center}
+  .stat b{display:block;font-size:1.3rem;font-weight:500;line-height:1.35}
+  .stat span{font-size:.7rem;color:var(--ink-3)}
+
+  ul{list-style:none;margin:0;padding:0}
+  li{display:flex;align-items:center;gap:10px;padding:9px 2px;
+    border-bottom:1px solid var(--rule-soft);font-size:.88rem}
+  li .d{color:var(--ink-2);white-space:nowrap}
+  li .meta{color:var(--ink-3);font-size:.78rem}
+  li .h{margin-inline-start:auto;font-weight:500;white-space:nowrap}
+  .del{background:none;border:none;padding:2px 6px;width:auto;
+    color:var(--ink-3);cursor:pointer;font-size:1.15rem;line-height:1;border-radius:3px}
+  .del:hover{color:var(--down)}
+  .empty{color:var(--ink-3);font-size:.86rem;padding:12px 0}
+  [hidden]{display:none!important}
+
+  @media (max-width:430px){
+    .sheet{padding:20px 13px 48px}
+    .big{font-size:2.6rem}
+    .r4{grid-template-columns:1fr 1fr}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+  /* ---- ماشین‌حساب شناور ---- */
+  .calc-widget{ position:fixed; left:12px; top:50%; transform:translateY(-50%); z-index:60; direction:ltr; }
+  .calc-fab{
+    width:46px;height:46px;border-radius:50%;
+    background:var(--ink); color:var(--paper); border:none;
+    font-size:1.25rem; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,.28);
+  }
+  .calc-fab:focus-visible{ outline:2px solid var(--dot-today); outline-offset:2px }
+  .calc-panel{
+    display:none; margin-top:8px;
+    background:var(--panel); border:1px solid var(--rule); border-radius:8px;
+    padding:8px; width:172px; box-shadow:0 6px 20px rgba(0,0,0,.22);
+  }
+  .calc-panel.open{ display:block }
+  .calc-display{
+    background:var(--paper); border:1px solid var(--rule); border-radius:4px;
+    padding:9px 10px; margin-bottom:6px;
+    font-size:1.2rem; text-align:left; direction:ltr;
+    overflow-x:auto; white-space:nowrap;
+  }
+  .calc-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:4px }
+  .calc-grid button{
+    padding:9px 0; font-size:.9rem; border:1px solid var(--rule); border-radius:4px;
+    background:var(--paper); color:var(--ink); cursor:pointer; font-family:inherit;
+  }
+  .calc-grid button:hover{ background:var(--line); color:var(--paper); border-color:var(--line) }
+  .calc-op{ background:var(--rule-soft) }
+  .calc-eq{ grid-row: span 2; background:var(--dot-today)!important; color:var(--paper)!important; border-color:var(--dot-today)!important }
+  .calc-zero{ grid-column: span 2 }
+
+  @media (min-width:900px){
+    .calc-fab{ display:none }
+    .calc-panel{ display:block!important; margin-top:0 }
+  }
+  @media (max-width:430px){
+    .calc-widget{ left:8px }
+    .calc-panel{ width:158px }
+  }
+
+  /* ---- نوار بالا و منوی سه‌نقطه ---- */
+  .topbar{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px }
+  .topbar h1{ margin:0 }
+  .menu-wrap{ position:relative; flex:none }
+  .menu-btn{
+    width:34px;height:34px;border-radius:50%;border:1px solid var(--rule);
+    background:var(--panel); color:var(--ink); font-size:1.15rem; line-height:1;
+    cursor:pointer;
+  }
+  .menu-btn:hover{ background:var(--rule-soft) }
+  .menu-btn:focus-visible{ outline:2px solid var(--dot-today); outline-offset:2px }
+  .menu-dropdown{
+    position:absolute; inset-inline-end:0; top:calc(100% + 6px);
+    background:var(--panel); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:0 6px 18px rgba(0,0,0,.2); overflow:hidden; min-width:170px; z-index:70;
+  }
+  .menu-dropdown button{
+    display:block; width:100%; text-align:right; padding:10px 14px;
+    background:none; border:none; color:var(--ink); font-family:inherit; font-size:.88rem;
+    cursor:pointer;
+  }
+  .menu-dropdown button + button{ border-top:1px solid var(--rule-soft) }
+  .menu-dropdown button:hover{ background:var(--rule-soft) }
+
+  /* ---- مودال ---- */
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(10,16,20,.5);
+    display:flex; align-items:center; justify-content:center; z-index:80; padding:16px;
+  }
+  .modal{
+    position:relative; background:var(--paper); border:1px solid var(--rule); border-radius:10px;
+    padding:22px 18px 18px; width:100%; max-width:340px; box-shadow:0 12px 32px rgba(0,0,0,.3);
+  }
+  .modal-close{
+    position:absolute; top:8px; inset-inline-start:10px;
+    width:28px;height:28px;border-radius:50%;border:none;background:none;
+    color:var(--ink-3); font-size:1.2rem; cursor:pointer; line-height:1;
+  }
+  .modal-close:hover{ background:var(--rule-soft); color:var(--ink) }
+</style>
+</head>
+<body>
+<main class="sheet">
+  <div class="topbar">
+    <h1>دفتر مطالعه</h1>
+    <div class="menu-wrap">
+      <button type="button" class="menu-btn" id="menuBtn" aria-label="منو" aria-expanded="false">⋮</button>
+      <div class="menu-dropdown" id="menuDropdown" hidden>
+        <button type="button" id="menuAuthBtn">ورود / ثبت‌نام</button>
+        <button type="button" id="menuAboutBtn">دربارهٔ سایت</button>
+      </div>
+    </div>
+  </div>
+  <p class="sub">ساعت مطالعه و نتیجهٔ تست‌هایت را ثبت کن و روندت را ببین.</p>
+  <p class="syncline" id="syncLine"><span class="dot"></span><span id="syncText">در حال بررسی وضعیت هم‌گام‌سازی…</span></p>
+
+  <div class="tabs" role="tablist">
+    <button type="button" role="tab" id="tabStudy" aria-selected="true" aria-controls="panelStudy">ساعت مطالعه</button>
+    <button type="button" role="tab" id="tabTest" aria-selected="false" aria-controls="panelTest">پیشرفت تستی</button>
+  </div>
+
+  <!-- ================= ساعت مطالعه ================= -->
+  <div id="panelStudy" role="tabpanel" aria-labelledby="tabStudy">
+    <div class="today">
+      <span class="big" id="todayHours">—</span>
+      <span class="unit">ساعت امروز</span>
+      <span class="delta" id="delta"></span>
+    </div>
+
+    <form id="studyForm">
+      <fieldset>
+        <div class="row r3">
+          <div><label for="sYear">سال</label><select id="sYear"></select></div>
+          <div><label for="sMonth">ماه</label><select id="sMonth"></select></div>
+          <div><label for="sDay">روز</label><select id="sDay"></select></div>
+        </div>
+        <p class="hintline" id="sDatePreview"></p>
+        <div class="row">
+          <div><label for="sHours">ساعت مطالعه</label>
+            <input type="text" id="sHours" inputmode="decimal" placeholder="۲٫۵"></div>
+        </div>
+        <button type="submit" class="submit">ثبت ساعت</button>
+      </fieldset>
+    </form>
+    <p class="msg" id="sMsg"></p>
+
+    <section>
+      <h2 id="hoursChartTitle">روند چهارده روز اخیر</h2>
+      <div class="ranges" id="studyRanges">
+        <button type="button" data-r="day" aria-selected="true">۱۴ روز</button>
+        <button type="button" data-r="week" aria-selected="false">هفتگی</button>
+        <button type="button" data-r="month" aria-selected="false">ماهانه</button>
+        <button type="button" data-r="year" aria-selected="false">سالانه</button>
+      </div>
+      <svg class="chart" id="hoursChart" viewBox="0 0 360 200" role="img" aria-label="نمودار ساعت مطالعه"></svg>
+    </section>
+
+    <section>
+      <h2>خلاصه</h2>
+      <div class="stats">
+        <div class="stat"><b id="statWeek">—</b><span>هفت روز اخیر</span></div>
+        <div class="stat"><b id="statAvg">—</b><span>میانگین روزانه</span></div>
+        <div class="stat"><b id="statStreak">—</b><span>روز پیاپی</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>ثبت‌های اخیر</h2>
+      <ul id="studyList"></ul>
+      <p class="empty" id="studyEmpty" hidden>هنوز چیزی ثبت نکرده‌ای. اولین روزت را بالا وارد کن.</p>
+    </section>
+  </div>
+
+  <!-- ================= پیشرفت تستی ================= -->
+  <div id="panelTest" role="tabpanel" aria-labelledby="tabTest" hidden>
+    <form id="testForm">
+      <fieldset>
+        <div class="row r3">
+          <div><label for="tYear">سال</label><select id="tYear"></select></div>
+          <div><label for="tMonth">ماه</label><select id="tMonth"></select></div>
+          <div><label for="tDay">روز</label><select id="tDay"></select></div>
+        </div>
+        <p class="hintline" id="tDatePreview"></p>
+        <div class="row r2">
+          <div><label for="tSubject">درس</label>
+            <select id="tSubject">
+              <option value="physics">فیزیک</option>
+              <option value="chemistry">شیمی</option>
+              <option value="math">ریاضیات</option>
+            </select>
+          </div>
+          <div><label for="tTime">زمان (دقیقه)</label>
+            <input type="text" id="tTime" inputmode="decimal" placeholder="۲۵"></div>
+        </div>
+
+        <div class="tabs" role="tablist" id="entryModeTabs" style="margin-bottom:10px">
+          <button type="button" role="tab" data-mode="count" aria-selected="true">با تعداد</button>
+          <button type="button" role="tab" data-mode="percent" aria-selected="false">با درصد</button>
+        </div>
+
+        <div id="countFields">
+          <div class="row r4">
+            <div><label for="tCount">تعداد کل</label>
+              <input type="text" id="tCount" inputmode="numeric" placeholder="۲۰"></div>
+            <div><label for="tCorrect">تعداد صحیح</label>
+              <input type="text" id="tCorrect" inputmode="numeric" placeholder="۱۲"></div>
+            <div><label for="tWrong">تعداد غلط</label>
+              <input type="text" id="tWrong" inputmode="numeric" placeholder="۴"></div>
+            <div><label for="tBlank">تعداد نزده</label>
+              <input type="text" id="tBlank" inputmode="numeric" placeholder="۴"></div>
+          </div>
+          <p class="hintline" id="tHint"></p>
+        </div>
+
+        <div id="percentFields" hidden>
+          <div class="row r2">
+            <div><label for="tPercentCount">تعداد کل</label>
+              <input type="text" id="tPercentCount" inputmode="numeric" placeholder="۲۰"></div>
+            <div><label for="tPercent">درصد</label>
+              <input type="text" id="tPercent" inputmode="decimal" placeholder="۴۰"></div>
+          </div>
+        </div>
+
+        <button type="submit" class="submit">ثبت پارت تست</button>
+      </fieldset>
+    </form>
+    <p class="msg" id="tMsg"></p>
+
+    <div class="tabs" role="tablist" id="subjectTabs">
+      <button type="button" role="tab" data-s="physics" aria-selected="true">فیزیک</button>
+      <button type="button" role="tab" data-s="chemistry" aria-selected="false">شیمی</button>
+      <button type="button" role="tab" data-s="math" aria-selected="false">ریاضیات</button>
+    </div>
+
+    <section>
+      <h2 id="testChartTitle">روند تست‌زنی</h2>
+      <div class="ranges" id="testRanges">
+        <button type="button" data-r="day" aria-selected="true">۱۴ پارت</button>
+        <button type="button" data-r="week" aria-selected="false">هفتگی</button>
+        <button type="button" data-r="month" aria-selected="false">ماهانه</button>
+        <button type="button" data-r="year" aria-selected="false">سالانه</button>
+      </div>
+      <svg class="chart" id="testChart" viewBox="0 0 360 210" role="img" aria-label="نمودار پیشرفت تستی"></svg>
+      <div class="legend">
+        <span><i style="background:var(--percent)"></i>درصد تست</span>
+        <span><i style="background:var(--speed)"></i>سرعت تست‌زنی</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>خلاصهٔ این درس</h2>
+      <div class="stats">
+        <div class="stat"><b id="tStatCount">—</b><span>کل تست‌ها</span></div>
+        <div class="stat"><b id="tStatPercent">—</b><span>میانگین درصد</span></div>
+        <div class="stat"><b id="tStatSpeed">—</b><span>میانگین سرعت</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>پارت‌های ثبت‌شده</h2>
+      <ul id="testList"></ul>
+      <p class="empty" id="testEmpty" hidden>برای این درس هنوز پارتی ثبت نشده.</p>
+    </section>
+  </div>
+</main>
+
+<div class="modal-backdrop" id="authBackdrop" hidden>
+  <div class="modal">
+    <button type="button" class="modal-close" id="authClose" aria-label="بستن">×</button>
+    <div id="authLoggedOut">
+      <div class="tabs" role="tablist" id="authTabs">
+        <button type="button" role="tab" data-a="login" aria-selected="true">ورود</button>
+        <button type="button" role="tab" data-a="signup" aria-selected="false">ثبت‌نام</button>
+      </div>
+      <form id="authForm">
+        <div class="row">
+          <div><label for="authUser">نام کاربری</label>
+            <input type="text" id="authUser" autocomplete="username" placeholder="مثلاً javad۱۴"></div>
+        </div>
+        <div class="row">
+          <div><label for="authPass">رمز عبور (دقیقاً ۸ رقم)</label>
+            <input type="password" id="authPass" inputmode="numeric" maxlength="8" autocomplete="current-password" placeholder="••••••••"></div>
+        </div>
+        <button type="submit" class="submit" id="authSubmit">ورود</button>
+      </form>
+      <p class="msg" id="authMsg"></p>
+      <p class="hintline">این حساب فقط روی همین مرورگر ذخیره می‌شود، نه روی سرور.</p>
+    </div>
+    <div id="authLoggedIn" hidden>
+      <p>وارد شده به‌عنوان <b id="authWhoami"></b></p>
+      <button type="button" class="submit" id="authLogout">خروج از حساب</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="aboutBackdrop" hidden>
+  <div class="modal">
+    <button type="button" class="modal-close" id="aboutClose" aria-label="بستن">×</button>
+    <h2 style="margin-top:0">دربارهٔ سایت</h2>
+    <p style="margin-bottom:0">سایت توسط علکپو طراحی شده، با کمک Claude AI.</p>
+  </div>
+</div>
+
+<div class="calc-widget" id="calcWidget">
+  <button type="button" class="calc-fab" id="calcToggle" aria-label="ماشین‌حساب" aria-expanded="false">🧮</button>
+  <div class="calc-panel" id="calcPanel">
+    <div class="calc-display" id="calcDisplay">۰</div>
+    <div class="calc-grid">
+      <button type="button" class="calc-op" data-k="C">C</button>
+      <button type="button" class="calc-op" data-k="back">⌫</button>
+      <button type="button" class="calc-op" data-k="÷">÷</button>
+      <button type="button" class="calc-op" data-k="×">×</button>
+      <button type="button" data-k="7">۷</button>
+      <button type="button" data-k="8">۸</button>
+      <button type="button" data-k="9">۹</button>
+      <button type="button" class="calc-op" data-k="-">−</button>
+      <button type="button" data-k="4">۴</button>
+      <button type="button" data-k="5">۵</button>
+      <button type="button" data-k="6">۶</button>
+      <button type="button" class="calc-op" data-k="+">+</button>
+      <button type="button" data-k="1">۱</button>
+      <button type="button" data-k="2">۲</button>
+      <button type="button" data-k="3">۳</button>
+      <button type="button" class="calc-eq" data-k="=">=</button>
+      <button type="button" class="calc-zero" data-k="0">۰</button>
+      <button type="button" data-k=".">٫</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===================== تبدیل تاریخ شمسی ===================== */
+const JBREAKS=[-61,9,38,199,426,686,756,818,1111,1181,1210,1635,2060,2097,2192,2262,2324,2394,2456,3178];
+const idiv=(a,b)=>Math.trunc(a/b), imod=(a,b)=>a-Math.trunc(a/b)*b;
+
+function jalCal(jy){
+  let bl=JBREAKS.length, gy=jy+621, leapJ=-14, jp=JBREAKS[0], jm, jump=0, leap, leapG, march, n, i;
+  for(i=1;i<bl;i++){ jm=JBREAKS[i]; jump=jm-jp; if(jy<jm) break;
+    leapJ += idiv(jump,33)*8 + idiv(imod(jump,33),4); jp=jm; }
+  n=jy-jp;
+  leapJ += idiv(n,33)*8 + idiv(imod(n,33)+3,4);
+  if(imod(jump,33)===4 && jump-n===4) leapJ++;
+  leapG = idiv(gy,4) - idiv((idiv(gy,100)+1)*3,4) - 150;
+  march = 20 + leapJ - leapG;
+  let nn=n; if(jump-n<6) nn = n - jump + idiv(jump+4,33)*33;
+  leap = imod(imod(nn+1,33)-1,4); if(leap===-1) leap=4;
+  return {leap, gy, march};
+}
+const jIsLeap = jy => jalCal(jy).leap === 0;
+function g2d(gy,gm,gd){
+  let d = idiv((gy+idiv(gm-8,6)+100100)*1461,4) + idiv(153*imod(gm+9,12)+2,5) + gd - 34840408;
+  return d - idiv(idiv(gy+100100+idiv(gm-8,6),100)*3,4) + 752;
+}
+function d2g(jdn){
+  let j = 4*jdn + 139361631;
+  j += idiv(idiv(4*jdn+183187720,146097)*3,4)*4 - 3908;
+  const i = idiv(imod(j,1461),4)*5 + 308;
+  const gd = idiv(imod(i,153),5)+1;
+  const gm = imod(idiv(i,153),12)+1;
+  const gy = idiv(j,1461) - 100100 + idiv(8-gm,6);
+  return {gy,gm,gd};
+}
+function j2g(jy,jm,jd){ const r=jalCal(jy); return d2g(g2d(r.gy,3,r.march) + (jm-1)*31 - idiv(jm,7)*(jm-7) + jd - 1); }
+function g2j(gy,gm,gd){
+  const jdn=g2d(gy,gm,gd); let jy=d2g(jdn).gy-621; const r=jalCal(jy);
+  const jdn1f=g2d(r.gy,3,r.march); let k=jdn-jdn1f, jm, jd;
+  if(k>=0){ if(k<=185){ return {jy, jm:1+idiv(k,31), jd:imod(k,31)+1}; } k-=186; }
+  else { jy-=1; k+=179; if(r.leap===1) k+=1; }
+  jm = 7 + idiv(k,30); jd = imod(k,30)+1;
+  return {jy, jm, jd};
+}
+const J_MONTHS=["فروردین","اردیبهشت","خرداد","تیر","مرداد","شهریور","مهر","آبان","آذر","دی","بهمن","اسفند"];
+const jDaysInMonth=(jy,jm)=> jm<=6?31 : jm<=11?30 : (jIsLeap(jy)?30:29);
+
+/* ===================== کمکی ===================== */
+const pad=n=>String(n).padStart(2,"0");
+const isoOf=(gy,gm,gd)=>`${gy}-${pad(gm)}-${pad(gd)}`;
+function todayISO(){ const d=new Date(); return isoOf(d.getFullYear(),d.getMonth()+1,d.getDate()); }
+function shiftISO(n){ const d=new Date(); d.setDate(d.getDate()+n); return isoOf(d.getFullYear(),d.getMonth()+1,d.getDate()); }
+function isoToJ(s){ const [y,m,d]=s.split("-").map(Number); return g2j(y,m,d); }
+const FA_WEEKDAYS=["یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه","شنبه"];
+function weekdayOf(s){ const [y,m,d]=s.split("-").map(Number); return FA_WEEKDAYS[new Date(y,m-1,d).getDay()]; }
+function jLong(s){ const j=isoToJ(s); return `${weekdayOf(s)}، ${fa(j.jd)} ${J_MONTHS[j.jm-1]} ${fa(j.jy)}`; }
+function jShort(s){ const j=isoToJ(s); return `${fa(j.jd)} ${J_MONTHS[j.jm-1].slice(0,3)}`; }
+
+const FA_DIGITS="۰۱۲۳۴۵۶۷۸۹", AR_DIGITS="٠١٢٣٤٥٦٧٨٩";
+function fa(n){ return String(n).replace(/\d/g,d=>FA_DIGITS[+d]).replace(".","٫"); }
+function toNum(str){
+  if(str==null) return NaN;
+  let s=String(str).trim().replace(/٫/g,".").replace(/,/g,"");
+  s=s.replace(/[۰-۹]/g,c=>FA_DIGITS.indexOf(c)).replace(/[٠-٩]/g,c=>AR_DIGITS.indexOf(c));
+  return s===""?NaN:Number(s);
+}
+const round1=n=>Math.round(n*10)/10;
+
+/* ===================== ذخیره‌سازی ===================== */
+const HK_BASE="study-hours-v2", TK_BASE="study-tests-v1", ACTIVE_USER_KEY="study-active-user";
+function activeUser(){ try{ return localStorage.getItem(ACTIVE_USER_KEY); }catch(e){ return null; } }
+function hoursKey(){ const u=activeUser(); return u ? HK_BASE+":"+u : HK_BASE; }
+function testsKey(){ const u=activeUser(); return u ? TK_BASE+":"+u : TK_BASE; }
+
+let hours={}, tests=[];
+function loadAll(){
+  try{ const r=localStorage.getItem(hoursKey()); hours = r?JSON.parse(r):{}; }catch(e){ hours={}; }
+  if(typeof hours!=="object"||!hours) hours={};
+  if(!activeUser()){
+    try{ const old=localStorage.getItem("study-hours-v1");
+      if(old){ const o=JSON.parse(old); for(const k in o) if(!(k in hours)) hours[k]=o[k]; } }catch(e){}
+  }
+  try{ const r=localStorage.getItem(testsKey()); tests = r?JSON.parse(r):[]; }catch(e){ tests=[]; }
+  if(!Array.isArray(tests)) tests=[];
+}
+function saveHours(){ try{ localStorage.setItem(hoursKey(),JSON.stringify(hours)); queueCloudSave(); return true; }catch(e){ return false; } }
+function saveTests(){ try{ localStorage.setItem(testsKey(),JSON.stringify(tests)); queueCloudSave(); return true; }catch(e){ return false; } }
+
+/* ===================== انتخابگر تاریخ شمسی ===================== */
+function buildDatePicker(yEl,mEl,dEl,onChange){
+  const now=isoToJ(todayISO());
+  for(let y=now.jy-3;y<=now.jy+1;y++){
+    const o=document.createElement("option"); o.value=y; o.textContent=fa(y); yEl.appendChild(o);
+  }
+  J_MONTHS.forEach((m,i)=>{ const o=document.createElement("option"); o.value=i+1; o.textContent=m; mEl.appendChild(o); });
+  yEl.value=now.jy; mEl.value=now.jm;
+  function fillDays(){
+    const max=jDaysInMonth(+yEl.value,+mEl.value);
+    const prev=+dEl.value||now.jd;
+    dEl.innerHTML="";
+    for(let d=1;d<=max;d++){ const o=document.createElement("option"); o.value=d; o.textContent=fa(d); dEl.appendChild(o); }
+    dEl.value=Math.min(prev,max);
+  }
+  fillDays(); dEl.value=now.jd;
+  yEl.addEventListener("change",()=>{fillDays();onChange&&onChange();});
+  mEl.addEventListener("change",()=>{fillDays();onChange&&onChange();});
+  dEl.addEventListener("change",()=>onChange&&onChange());
+  return ()=>{ const g=j2g(+yEl.value,+mEl.value,+dEl.value); return isoOf(g.gy,g.gm,g.gd); };
+}
+
+/* ===================== موتور نمودار خطی ===================== */
+function drawLineChart(svg,{labels,series,suffix=""}){
+  const W=360, H=+svg.getAttribute("viewBox").split(" ")[3];
+  const padT=16, padB=26, padR=32, padL=8;
+  svg.innerHTML="";
+  const NS="http://www.w3.org/2000/svg";
+  const mk=(t,a)=>{ const e=document.createElementNS(NS,t); for(const k in a) e.setAttribute(k,a[k]); return e; };
+
+  const all=series.flatMap(s=>s.values.filter(v=>v!=null));
+  if(!all.length){
+    svg.appendChild(Object.assign(mk("text",{x:W/2,y:H/2,"text-anchor":"middle","font-size":"11",fill:"var(--ink-3)"}),
+      {textContent:"داده‌ای برای نمایش نیست"}));
+    return;
+  }
+  const rawMax=Math.max(...all,1);
+  const step = rawMax<=2?0.5 : rawMax<=5?1 : rawMax<=12?2 : rawMax<=30?5 : rawMax<=60?10 : rawMax<=150?25 : 50;
+  const top=Math.ceil(rawMax/step)*step || step;
+
+  const x0=padL, x1=W-padR, y0=padT, y1=H-padB;
+  const px=i=> labels.length===1 ? (x0+x1)/2 : x0 + i*(x1-x0)/(labels.length-1);
+  const py=v=> y1 - (v/top)*(y1-y0);
+
+  for(let v=0;v<=top+1e-9;v+=step){
+    svg.appendChild(mk("line",{x1:x0,x2:x1,y1:py(v),y2:py(v),
+      stroke:"var(--rule)","stroke-width":v===0?1.2:.7,"stroke-dasharray":v===0?"":"3 3"}));
+    const t=mk("text",{x:x1+4,y:py(v)+3.5,"font-size":"8.5",fill:"var(--ink-3)"});
+    t.textContent=fa(round1(v)); svg.appendChild(t);
+  }
+
+  const skip=Math.ceil(labels.length/8);
+  labels.forEach((lb,i)=>{
+    if(i%skip!==0 && i!==labels.length-1) return;
+    const t=mk("text",{x:px(i),y:H-8,"font-size":"8","text-anchor":"middle",fill:"var(--ink-3)"});
+    t.textContent=lb; svg.appendChild(t);
+  });
+
+  series.forEach(s=>{
+    let d="", open=false;
+    s.values.forEach((v,i)=>{
+      if(v==null){ open=false; return; }
+      d += (open?" L ":" M ") + px(i) + " " + py(v); open=true;
+    });
+    if(d) svg.appendChild(mk("path",{d:d.trim(),fill:"none",stroke:s.color,
+      "stroke-width":1.8,"stroke-linejoin":"round","stroke-linecap":"round"}));
+    s.values.forEach((v,i)=>{
+      if(v==null) return;
+      const hi = typeof s.highlight==="function" && s.highlight(i);
+      const c=mk("circle",{cx:px(i),cy:py(v),r:hi?4:2.8,
+        fill:hi?"var(--dot-today)":s.color,
+        stroke:"var(--paper)","stroke-width":1});
+      const ttl=document.createElementNS(NS,"title");
+      ttl.textContent=`${labels[i]} — ${fa(round1(v))}${suffix}`;
+      c.appendChild(ttl); svg.appendChild(c);
+    });
+  });
+}
+
+/* ===================== بخش ساعت مطالعه ===================== */
+const getStudyDate=buildDatePicker(sYear,sMonth,sDay,()=>{ sDatePreview.textContent=jLong(getStudyDate()); });
+sDatePreview.textContent=jLong(getStudyDate());
+
+function renderToday(){
+  const t=hours[todayISO()], y=hours[shiftISO(-1)];
+  todayHours.textContent = t===undefined?"—":fa(t);
+  if(t===undefined){ delta.textContent=""; delta.className="delta"; return; }
+  if(y===undefined){ delta.textContent="برای دیروز ثبتی نداری"; delta.className="delta flat"; return; }
+  const diff=t-y, pct = y!==0 ? Math.round(diff/y*100) : (t>0?100:0);
+  if(diff>0){ delta.className="delta up";
+    delta.textContent=`${fa(round1(Math.abs(diff)))} ساعت بیشتر از دیروز (${fa(Math.abs(pct))}٪ رشد)`; }
+  else if(diff<0){ delta.className="delta down";
+    delta.textContent=`${fa(round1(Math.abs(diff)))} ساعت کمتر از دیروز (${fa(Math.abs(pct))}٪ افت)`; }
+  else { delta.className="delta flat"; delta.textContent="دقیقاً به اندازهٔ دیروز"; }
+}
+
+/* ---------- سطل‌بندی بازه‌های زمانی ---------- */
+const RANGE_TITLE={day:"روند چهارده روز اخیر",week:"مجموع هر هفته (۱۲ هفته اخیر)",
+  month:"مجموع هر ماه (۱۲ ماه اخیر)",year:"مجموع هر سال"};
+
+function weekStartISO(iso){
+  const [y,m,d]=iso.split("-").map(Number);
+  const dt=new Date(y,m-1,d);
+  dt.setDate(dt.getDate()-((dt.getDay()+1)%7)); // هفته از شنبه شروع می‌شود
+  return isoOf(dt.getFullYear(),dt.getMonth()+1,dt.getDate());
+}
+function bucketOf(iso,range){
+  if(range==="day") return iso;
+  if(range==="week") return weekStartISO(iso);
+  const j=isoToJ(iso);
+  return range==="month" ? `${j.jy}-${pad(j.jm)}` : `${j.jy}`;
+}
+function bucketList(range){
+  const out=[];
+  if(range==="day"){ for(let i=13;i>=0;i--) out.push(shiftISO(-i)); return out; }
+  if(range==="week"){
+    let ws=weekStartISO(todayISO());
+    for(let i=11;i>=0;i--){
+      const [y,m,d]=ws.split("-").map(Number);
+      const dt=new Date(y,m-1,d); dt.setDate(dt.getDate()-i*7);
+      out.push(isoOf(dt.getFullYear(),dt.getMonth()+1,dt.getDate()));
+    }
+    return out;
+  }
+  const now=isoToJ(todayISO());
+  if(range==="month"){
+    let jy=now.jy, jm=now.jm;
+    for(let i=0;i<12;i++){ out.unshift(`${jy}-${pad(jm)}`); jm--; if(jm<1){ jm=12; jy--; } }
+    return out;
+  }
+  for(let y=now.jy-4;y<=now.jy;y++) out.push(`${y}`);
+  return out;
+}
+function bucketLabel(key,range){
+  if(range==="day") return jShort(key);
+  if(range==="week") return jShort(key);
+  if(range==="month"){ const [y,m]=key.split("-").map(Number); return J_MONTHS[m-1].slice(0,3)+" "+fa(String(y).slice(-2)); }
+  return fa(key);
+}
+
+let studyRange="day";
+
+function renderHoursChart(){
+  const keys=bucketList(studyRange);
+  hoursChartTitle.textContent=RANGE_TITLE[studyRange];
+
+  const totals={};
+  for(const iso in hours){
+    const k=bucketOf(iso,studyRange);
+    totals[k]=(totals[k]??0)+hours[iso];
+  }
+  drawLineChart(hoursChart,{
+    labels:keys.map(k=>bucketLabel(k,studyRange)),
+    suffix:" ساعت",
+    series:[{color:"var(--line)", values:keys.map(k=>k in totals?round1(totals[k]):null),
+      highlight: studyRange==="day" ? i=>keys[i]===todayISO() : null}]
+  });
+}
+
+document.querySelectorAll("#studyRanges button").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    studyRange=btn.dataset.r;
+    document.querySelectorAll("#studyRanges button").forEach(b=>
+      b.setAttribute("aria-selected", b===btn?"true":"false"));
+    renderHoursChart();
+  });
+});
+
+function renderStudyStats(){
+  let week=0; for(let i=0;i<7;i++) week += hours[shiftISO(-i)]??0;
+  const all=Object.values(hours);
+  const avg = all.length ? all.reduce((a,b)=>a+b,0)/all.length : 0;
+  let streak=0;
+  for(let i=0;i<400;i++){ const v=hours[shiftISO(-i)];
+    if(v===undefined||v<=0){ if(i===0) continue; break; } streak++; }
+  statWeek.textContent=fa(round1(week));
+  statAvg.textContent= all.length?fa(round1(avg)):"—";
+  statStreak.textContent=fa(streak);
+}
+
+function renderStudyList(){
+  studyList.innerHTML="";
+  const keys=Object.keys(hours).sort().reverse().slice(0,30);
+  studyEmpty.hidden = keys.length>0;
+  keys.forEach(k=>{
+    const li=document.createElement("li");
+    li.innerHTML=`<span class="d">${jLong(k)}</span><span class="h">${fa(hours[k])} ساعت</span>`;
+    const b=document.createElement("button");
+    b.type="button"; b.className="del"; b.textContent="×"; b.setAttribute("aria-label","حذف");
+    b.onclick=()=>{ delete hours[k]; saveHours(); renderStudy(); };
+    li.appendChild(b); studyList.appendChild(li);
+  });
+}
+function renderStudy(){ renderToday(); renderHoursChart(); renderStudyStats(); renderStudyList(); }
+
+studyForm.addEventListener("submit",e=>{
+  e.preventDefault();
+  const h=toNum(sHours.value);
+  if(isNaN(h)||h<0||h>24){ sMsg.className="msg err"; sMsg.textContent="ساعت باید عددی بین ۰ تا ۲۴ باشد."; return; }
+  const iso=getStudyDate();
+  hours[iso]=round1(h);
+  const ok=saveHours(); sHours.value=""; renderStudy();
+  sMsg.className="msg";
+  sMsg.textContent = ok ? `${fa(round1(h))} ساعت برای ${jLong(iso)} ثبت شد.`
+                        : "ثبت شد، اما مرورگر نتوانست ذخیره‌اش کند؛ با بستن صفحه پاک می‌شود.";
+});
+
+/* ===================== بخش پیشرفت تستی ===================== */
+const SUBJECTS={physics:"فیزیک",chemistry:"شیمی",math:"ریاضیات"};
+let activeSubject="physics";
+const getTestDate=buildDatePicker(tYear,tMonth,tDay,()=>{ tDatePreview.textContent=jLong(getTestDate()); });
+tDatePreview.textContent=jLong(getTestDate());
+
+const percentOf=t=> t.mode==="percent" ? t.percent : (t.count>0 ? ((t.correct*3 - t.wrong)/(t.count*3))*100 : 0);
+const speedOf  =t=> t.count>0 && t.minutes>0 ? (t.count/t.minutes)*100 : 0;
+
+/* ---------- تب سوییچ روش ورود اطلاعات ---------- */
+let entryMode="count";
+document.querySelectorAll("#entryModeTabs button").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    entryMode=btn.dataset.mode;
+    document.querySelectorAll("#entryModeTabs button").forEach(b=>
+      b.setAttribute("aria-selected", b===btn?"true":"false"));
+    countFields.hidden = entryMode!=="count";
+    percentFields.hidden = entryMode!=="percent";
+    tMsg.textContent="";
+  });
+});
+
+/* ---------- پر کردن خودکار سومین/چهارمین فیلد ---------- */
+function solveMissing(vals){
+  const keys=["count","correct","wrong","blank"];
+  const empties=keys.filter(k=>vals[k]===null);
+  if(empties.length!==1) return vals;
+  const missing=empties[0];
+  const others=keys.filter(k=>k!==missing);
+  if(others.some(k=>vals[k]===null||vals[k]<0)) return vals;
+  let val;
+  if(missing==="count") val=vals.correct+vals.wrong+vals.blank;
+  else if(missing==="correct") val=vals.count-vals.wrong-vals.blank;
+  else if(missing==="wrong") val=vals.count-vals.correct-vals.blank;
+  else val=vals.count-vals.correct-vals.wrong;
+  if(val<0) return vals;
+  return {...vals,[missing]:val};
+}
+const countRefs={count:tCount,correct:tCorrect,wrong:tWrong,blank:tBlank};
+
+function updateHint(){
+  const c=toNum(tCount.value), ok=toNum(tCorrect.value), w=toNum(tWrong.value), b=toNum(tBlank.value), m=toNum(tTime.value);
+  const parts=[];
+  if(!isNaN(c)&&!isNaN(ok)&&!isNaN(w)&&!isNaN(b)){
+    if(c>0) parts.push(`درصد: ${fa(round1(((ok*3-w)/(c*3))*100))}٪`);
+    if(ok+w+b!==c) parts.push(`جمع صحیح+غلط+نزده (${fa(ok+w+b)}) با تعداد کل (${fa(c)}) نمی‌خواند`);
+  }
+  if(!isNaN(c)&&!isNaN(m)&&m>0) parts.push(`سرعت: ${fa(round1((c/m)*100))}`);
+  tHint.textContent=parts.join(" · ");
+}
+["count","correct","wrong","blank"].forEach(key=>{
+  countRefs[key].addEventListener("input",()=>{
+    const vals={};
+    for(const k in countRefs) vals[k] = countRefs[k].value.trim()==="" ? null : toNum(countRefs[k].value);
+    const solved=solveMissing(vals);
+    for(const k in countRefs){
+      if(k!==key && solved[k]!=null && countRefs[k].value.trim()==="") countRefs[k].value=fa(solved[k]);
+    }
+    updateHint();
+  });
+});
+tTime.addEventListener("input",updateHint);
+
+testForm.addEventListener("submit",e=>{
+  e.preventDefault();
+  try{ submitTest(); }
+  catch(err){ tMsg.className="msg err"; tMsg.textContent="خطای غیرمنتظره: "+err.message; }
+});
+function submitTest(){
+  const m=toNum(tTime.value);
+  const bad=v=>isNaN(v)||v<0;
+  if(bad(m)||m<=0){ tMsg.className="msg err"; tMsg.textContent="زمان باید عددی بزرگ‌تر از صفر (به دقیقه) باشد."; return; }
+
+  let record;
+  if(entryMode==="percent"){
+    const c=toNum(tPercentCount.value), p=toNum(tPercent.value);
+    if(bad(c)||c<=0){ tMsg.className="msg err"; tMsg.textContent="تعداد کل تست باید عددی بزرگ‌تر از صفر باشد."; return; }
+    if(isNaN(p)||p<-100||p>100){ tMsg.className="msg err"; tMsg.textContent="درصد باید عددی بین ۱۰۰- تا ۱۰۰ باشد."; return; }
+    record={mode:"percent", count:c, percent:p, minutes:m};
+  }else{
+    const c=toNum(tCount.value), ok=toNum(tCorrect.value), w=toNum(tWrong.value);
+    let b=toNum(tBlank.value);
+    if(bad(c)||c<=0){ tMsg.className="msg err"; tMsg.textContent="تعداد کل تست باید عددی بزرگ‌تر از صفر باشد."; return; }
+    if(bad(ok)||bad(w)){ tMsg.className="msg err"; tMsg.textContent="تعداد صحیح و غلط را درست وارد کن."; return; }
+    if(ok+w>c){ tMsg.className="msg err";
+      tMsg.textContent=`جمع صحیح و غلط (${fa(ok+w)}) نمی‌تواند از تعداد کل (${fa(c)}) بیشتر باشد.`; return; }
+    b = Math.max(0, c-ok-w);
+    record={mode:"count", count:c, correct:ok, wrong:w, blank:b, minutes:m};
+  }
+
+  tests.push({id:Date.now()+"", date:getTestDate(), subject:tSubject.value, ...record});
+  const saved=saveTests();
+  [tCount,tCorrect,tWrong,tBlank,tTime,tPercentCount,tPercent].forEach(el=>el.value="");
+  tHint.textContent="";
+  activeSubject=tSubject.value;
+  document.querySelectorAll("#subjectTabs button").forEach(btn=>
+    btn.setAttribute("aria-selected", btn.dataset.s===activeSubject?"true":"false"));
+  renderTests();
+  tMsg.className="msg";
+  tMsg.textContent = saved ? `پارت ${SUBJECTS[activeSubject]} ثبت شد.`
+                           : "ثبت شد، اما مرورگر نتوانست ذخیره‌اش کند.";
+}
+
+document.querySelectorAll("#subjectTabs button").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    activeSubject=btn.dataset.s;
+    document.querySelectorAll("#subjectTabs button").forEach(b=>
+      b.setAttribute("aria-selected", b===btn?"true":"false"));
+    renderTests();
+  });
+});
+
+function subjectTests(){
+  return tests.filter(t=>t.subject===activeSubject)
+              .sort((a,b)=> a.date===b.date ? a.id-b.id : (a.date<b.date?-1:1));
+}
+
+let testRange="day";
+
+function renderTestChart(){
+  const all=subjectTests();
+  const rangeName={day:"آخرین پارت‌ها",week:"میانگین هفتگی",month:"میانگین ماهانه",year:"میانگین سالانه"};
+  testChartTitle.textContent=`روند تست‌زنی ${SUBJECTS[activeSubject]} — ${rangeName[testRange]}`;
+
+  let labels, percents, speeds;
+
+  if(testRange==="day"){
+    const list=all.slice(-14);
+    labels=list.map(t=>jShort(t.date));
+    percents=list.map(t=>round1(percentOf(t)));
+    speeds=list.map(t=>round1(speedOf(t)));
+  }else{
+    const keys=bucketList(testRange);
+    const groups={};
+    all.forEach(t=>{
+      const k=bucketOf(t.date,testRange);
+      (groups[k]=groups[k]||[]).push(t);
+    });
+    labels=keys.map(k=>bucketLabel(k,testRange));
+    const avg=(k,fn)=> groups[k] ? round1(groups[k].reduce((a,t)=>a+fn(t),0)/groups[k].length) : null;
+    percents=keys.map(k=>avg(k,percentOf));
+    speeds=keys.map(k=>avg(k,speedOf));
+  }
+
+  drawLineChart(testChart,{
+    labels, suffix:"",
+    series:[
+      {color:"var(--percent)", values:percents},
+      {color:"var(--speed)",   values:speeds}
+    ]
+  });
+}
+
+document.querySelectorAll("#testRanges button").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    testRange=btn.dataset.r;
+    document.querySelectorAll("#testRanges button").forEach(b=>
+      b.setAttribute("aria-selected", b===btn?"true":"false"));
+    renderTestChart();
+  });
+});
+
+function renderTestStats(){
+  const list=subjectTests();
+  if(!list.length){ tStatCount.textContent="—"; tStatPercent.textContent="—"; tStatSpeed.textContent="—"; return; }
+  const total=list.reduce((a,t)=>a+t.count,0);
+  const avgP=list.reduce((a,t)=>a+percentOf(t),0)/list.length;
+  const avgS=list.reduce((a,t)=>a+speedOf(t),0)/list.length;
+  tStatCount.textContent=fa(total);
+  tStatPercent.textContent=fa(round1(avgP))+"٪";
+  tStatSpeed.textContent=fa(round1(avgS));
+}
+
+function renderTestList(){
+  const list=subjectTests().slice().reverse().slice(0,30);
+  testList.innerHTML="";
+  testEmpty.hidden = list.length>0;
+  list.forEach(t=>{
+    const li=document.createElement("li");
+    const meta = t.mode==="percent"
+      ? `${fa(t.count)} تست · درصد مستقیم · ${fa(t.minutes)} دقیقه`
+      : `${fa(t.count)} تست · ${fa(t.correct)}✓ ${fa(t.wrong)}✗ ${fa(t.blank)}− · ${fa(t.minutes)} دقیقه`;
+    li.innerHTML=`<span class="d">${jLong(t.date)}</span>
+      <span class="meta">${meta}</span>
+      <span class="h">${fa(round1(percentOf(t)))}٪</span>`;
+    const b=document.createElement("button");
+    b.type="button"; b.className="del"; b.textContent="×"; b.setAttribute("aria-label","حذف");
+    b.onclick=()=>{ tests=tests.filter(x=>x.id!==t.id); saveTests(); renderTests(); };
+    li.appendChild(b); testList.appendChild(li);
+  });
+}
+function renderTests(){ renderTestChart(); renderTestStats(); renderTestList(); }
+
+/* ===================== تب‌های اصلی ===================== */
+tabStudy.addEventListener("click",()=>switchTab(true));
+tabTest.addEventListener("click",()=>switchTab(false));
+function switchTab(study){
+  tabStudy.setAttribute("aria-selected",study);
+  tabTest.setAttribute("aria-selected",!study);
+  panelStudy.hidden=!study; panelTest.hidden=study;
+  if(study) renderStudy(); else renderTests();
+}
+
+/* ===================== هم‌گام‌سازی با حساب Claude ===================== */
+let dbRef=null, cloudReady=false, writeChain=Promise.resolve(), suppressNextLocalEcho=false;
+
+function setSync(text,on){ syncText.textContent=text; syncLine.className="syncline"+(on?" on":""); }
+
+function queueCloudSave(){
+  if(!cloudReady||!dbRef) return;
+  writeChain = writeChain.then(()=> dbRef.set({hours, tests}).catch(()=>{}));
+}
+
+async function initCloudSync(){
+  let db, user;
+  try{ db = await claude.use("db"); user = await claude.use("user"); }
+  catch(e){ db=null; user=null; }
+
+  if(!db || !user){
+    setSync("فقط روی همین مرورگر ذخیره می‌شود", false);
+    return;
+  }
+  const uid = await user.id();
+  if(!uid){
+    setSync("برای هم‌گام‌سازی بین دستگاه‌ها، وارد حساب Claude شو", false);
+    return;
+  }
+
+  dbRef = db.doc(`data/users/${uid}/state`);
+
+  try{
+    const snap = await dbRef.get();
+    if(snap.exists){
+      const cloud = snap.data() || {};
+      const cloudHours = cloud.hours || {};
+      const cloudTests = Array.isArray(cloud.tests) ? cloud.tests : [];
+      // ادغام یک‌باره: هر چیزی که فقط روی این مرورگر بود هم حفظ شود
+      hours = {...cloudHours, ...hours};
+      const seenIds = new Set(cloudTests.map(t=>t.id));
+      tests = cloudTests.concat(tests.filter(t=>!seenIds.has(t.id)));
+      saveHoursLocal(); saveTestsLocal();
+    }
+    cloudReady = true;
+    setSync("با حساب شما هم‌گام است — روی هر دستگاهی یکی است", true);
+    renderStudy(); renderTests();
+    queueCloudSave(); // ادغام احتمالی بالا را هم ذخیره کن
+
+    dbRef.onSnapshot(snap=>{
+      if(suppressNextLocalEcho){ suppressNextLocalEcho=false; return; }
+      if(!snap.exists) return;
+      const cloud = snap.data() || {};
+      hours = cloud.hours || {};
+      tests = Array.isArray(cloud.tests) ? cloud.tests : [];
+      saveHoursLocal(); saveTestsLocal();
+      renderStudy(); renderTests();
+    }, ()=>{ setSync("فقط روی همین مرورگر ذخیره می‌شود", false); cloudReady=false; });
+
+  }catch(e){
+    setSync("فقط روی همین مرورگر ذخیره می‌شود", false);
+  }
+}
+function saveHoursLocal(){ try{ localStorage.setItem(hoursKey(),JSON.stringify(hours)); }catch(e){} }
+function saveTestsLocal(){ try{ localStorage.setItem(testsKey(),JSON.stringify(tests)); }catch(e){} }
+
+/* ===================== ماشین‌حساب شناور ===================== */
+(function(){
+  let cur="0", prev=null, op=null, resetNext=false;
+  const roundC=n=>Math.round(n*1e10)/1e10;
+
+  function draw(){ calcDisplay.textContent = cur==="خطا" ? cur : fa(cur); }
+  function pressDigit(d){ if(cur==="0"||resetNext){ cur=d; resetNext=false; } else if(cur.length<14) cur+=d; draw(); }
+  function pressDot(){ if(resetNext){ cur="0"; resetNext=false; } if(!cur.includes(".")) cur+="."; draw(); }
+  function compute(){
+    const a=prev, b=parseFloat(cur); let r;
+    if(op==="+") r=a+b; else if(op==="-") r=a-b; else if(op==="×") r=a*b;
+    else if(op==="÷") r = b===0 ? NaN : a/b;
+    cur = isNaN(r) ? "خطا" : String(roundC(r));
+    op=null; prev=null; resetNext=true;
+  }
+  function pressOp(o){
+    if(op && !resetNext) compute();
+    if(cur!=="خطا"){ prev=parseFloat(cur); op=o; }
+    resetNext=true; draw();
+  }
+  function pressEquals(){ if(op!==null && cur!=="خطا") compute(); draw(); }
+  function pressClear(){ cur="0"; prev=null; op=null; resetNext=false; draw(); }
+  function pressBack(){ if(resetNext) return; cur = cur.length>1 ? cur.slice(0,-1) : "0"; draw(); }
+
+  document.querySelectorAll("#calcWidget .calc-grid button").forEach(b=>{
+    b.addEventListener("click",()=>{
+      const k=b.dataset.k;
+      if(k==="C") pressClear();
+      else if(k==="back") pressBack();
+      else if(k==="=") pressEquals();
+      else if(k===".") pressDot();
+      else if(k==="+"||k==="-"||k==="×"||k==="÷") pressOp(k);
+      else pressDigit(k);
+    });
+  });
+
+  calcToggle.addEventListener("click",()=>{
+    const open=calcPanel.classList.toggle("open");
+    calcToggle.setAttribute("aria-expanded",String(open));
+  });
+})();
+
+/* ===================== منو، ورود/ثبت‌نام، دربارهٔ سایت ===================== */
+(function(){
+  const ACCOUNTS_KEY="study-accounts-v1";
+  function toLatinDigits(s){ return String(s).replace(/[۰-۹]/g,c=>FA_DIGITS.indexOf(c)).replace(/[٠-٩]/g,c=>AR_DIGITS.indexOf(c)); }
+  const userRe=/^[\p{L}\p{N}_-]{2,24}$/u, passRe=/^\d{8}$/;
+
+  function getAccounts(){ try{ return JSON.parse(localStorage.getItem(ACCOUNTS_KEY)||"{}"); }catch(e){ return {}; } }
+  function saveAccounts(obj){ try{ localStorage.setItem(ACCOUNTS_KEY,JSON.stringify(obj)); return true; }catch(e){ return false; } }
+  async function hashPass(u,p){
+    const enc=new TextEncoder().encode(u.toLowerCase()+":"+p);
+    const buf=await crypto.subtle.digest("SHA-256",enc);
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+  }
+
+  /* ---- منوی سه‌نقطه ---- */
+  menuBtn.addEventListener("click",e=>{
+    e.stopPropagation();
+    const willOpen=menuDropdown.hidden;
+    menuDropdown.hidden=!willOpen;
+    menuBtn.setAttribute("aria-expanded",String(willOpen));
+  });
+  document.addEventListener("click",()=>{
+    if(!menuDropdown.hidden){ menuDropdown.hidden=true; menuBtn.setAttribute("aria-expanded","false"); }
+  });
+
+  /* ---- دربارهٔ سایت ---- */
+  menuAboutBtn.addEventListener("click",e=>{ e.stopPropagation(); menuDropdown.hidden=true; aboutBackdrop.hidden=false; });
+  aboutClose.addEventListener("click",()=> aboutBackdrop.hidden=true);
+  aboutBackdrop.addEventListener("click",e=>{ if(e.target===aboutBackdrop) aboutBackdrop.hidden=true; });
+
+  /* ---- ورود / ثبت‌نام ---- */
+  let authMode="login";
+  function refreshAuthView(){
+    const u=activeUser();
+    if(u){
+      authLoggedOut.hidden=true; authLoggedIn.hidden=false;
+      const accounts=getAccounts();
+      authWhoami.textContent=(accounts[u]&&accounts[u].display)||u;
+    }else{
+      authLoggedOut.hidden=false; authLoggedIn.hidden=true;
+      authMsg.className="msg"; authMsg.textContent=""; authUser.value=""; authPass.value="";
+    }
+  }
+  function openAuthModal(){ refreshAuthView(); authBackdrop.hidden=false; }
+  function closeAuthModal(){ authBackdrop.hidden=true; }
+
+  menuAuthBtn.addEventListener("click",e=>{ e.stopPropagation(); menuDropdown.hidden=true; openAuthModal(); });
+  authClose.addEventListener("click",closeAuthModal);
+  authBackdrop.addEventListener("click",e=>{ if(e.target===authBackdrop) closeAuthModal(); });
+
+  document.querySelectorAll("#authTabs button").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      authMode=btn.dataset.a;
+      document.querySelectorAll("#authTabs button").forEach(b=>b.setAttribute("aria-selected", b===btn?"true":"false"));
+      authSubmit.textContent = authMode==="signup" ? "ایجاد حساب" : "ورود";
+      authMsg.className="msg"; authMsg.textContent="";
+    });
+  });
+
+  authForm.addEventListener("submit", async e=>{
+    e.preventDefault();
+    const uname=authUser.value.trim();
+    const pass=toLatinDigits(authPass.value.trim());
+    if(!userRe.test(uname)){ authMsg.className="msg err"; authMsg.textContent="نام کاربری باید ۲ تا ۲۴ حرف یا رقم باشد."; return; }
+    if(!passRe.test(pass)){ authMsg.className="msg err"; authMsg.textContent="رمز باید دقیقاً ۸ رقم باشد."; return; }
+    if(!window.crypto||!window.crypto.subtle){ authMsg.className="msg err"; authMsg.textContent="مرورگرت از این قابلیت پشتیبانی نمی‌کند."; return; }
+
+    const key=uname.toLowerCase();
+    const hash=await hashPass(uname,pass);
+    const accounts=getAccounts();
+
+    if(authMode==="signup"){
+      if(accounts[key]){ authMsg.className="msg err"; authMsg.textContent="این نام کاربری قبلاً ثبت شده — وارد شو."; return; }
+      accounts[key]={hash, display:uname};
+      if(!saveAccounts(accounts)){ authMsg.className="msg err"; authMsg.textContent="ذخیره‌سازی با مشکل مواجه شد."; return; }
+      try{ localStorage.setItem(ACTIVE_USER_KEY,key); }catch(err){}
+      saveHoursLocal(); saveTestsLocal(); // داده‌های فعلی این مرورگر به حساب تازه منتقل می‌شود
+    }else{
+      const acc=accounts[key];
+      if(!acc||acc.hash!==hash){ authMsg.className="msg err"; authMsg.textContent="نام کاربری یا رمز اشتباه است."; return; }
+      try{ localStorage.setItem(ACTIVE_USER_KEY,key); }catch(err){}
+      loadAll();
+    }
+    renderStudy(); renderTests();
+    refreshAuthView();
+  });
+
+  authLogout.addEventListener("click",()=>{
+    try{ localStorage.removeItem(ACTIVE_USER_KEY); }catch(err){}
+    loadAll(); renderStudy(); renderTests();
+    authMode="login"; authSubmit.textContent="ورود";
+    document.querySelectorAll("#authTabs button").forEach(b=>b.setAttribute("aria-selected", b.dataset.a==="login"?"true":"false"));
+    refreshAuthView();
+  });
+})();
+
+/* ===================== شروع ===================== */
+loadAll();
+renderStudy();
+renderTests();
+initCloudSync();
+</script>
+</body>
+</html>
